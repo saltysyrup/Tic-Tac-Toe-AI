@@ -21,6 +21,7 @@ class HumanPlayer implements Player {
         return symbol;
     }
 
+    //todo - disallow move outside board bounds to avoid runtime error
     @Override
     public void makeMove(TicTacToe game) {
         Scanner scanner = new Scanner(System.in);
@@ -136,7 +137,7 @@ class TicTacToe {
     public void makeMove(int move, char symbol) {
         board[move] = symbol;
     }
-//Todo - this is not woring - ie: no winner when x in a row in center column
+
 public boolean checkWin() {
     // Check rows
     for (int i = 0; i < 3; i++) {
@@ -173,18 +174,25 @@ public boolean checkWin() {
     }
 
     public void displayBoard() {
+    
         for (int i = 0; i < 9; i++) {
-            System.out.print(board[i] + " ");
+            System.out.print(" " + board[i] + " ");
             if (i % 3 == 2) {
                 System.out.println();
+                if (i != 8) {
+                    System.out.println("-----------");
+                }
+            } else {
+                System.out.print("|");
             }
         }
         System.out.println();
     }
 
     public static void main(String[] args) {
-        Player player1 = new HumanPlayer('X');
-        Player player2 = new AIPlayer('O', new RandomAI());
+        Player player1 = new HumanPlayer('O');
+        //Player player1 = new AIPlayer('O', new SimpleAI());   // ie: "Jim-AI"
+        Player player2 = new AIPlayer('X', new RandomAI());
         TicTacToe game = new TicTacToe(player1, player2);
         game.play();
     }
