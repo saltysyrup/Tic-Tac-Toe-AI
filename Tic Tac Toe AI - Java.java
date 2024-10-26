@@ -75,6 +75,27 @@ class SimpleAI implements AI {
     }
 }
 
+class RandomAI implements AI {
+    private Random random = new Random();
+
+    @Override
+    public int determineMove(TicTacToe game) {
+        List<Integer> possibleMoves = new ArrayList<>();
+        for (int i = 0; i < 9; i++) {
+            if (game.isValidMove(i)) {
+                possibleMoves.add(i);
+            }
+        }
+
+        if (possibleMoves.isEmpty()) {
+            return -1; // No valid moves
+        }
+
+        int randomIndex = random.nextInt(possibleMoves.size());
+        return possibleMoves.get(randomIndex);
+    }
+}
+
 class TicTacToe {
     private char[] board;
     private List<Player> players;
@@ -115,29 +136,32 @@ class TicTacToe {
     public void makeMove(int move, char symbol) {
         board[move] = symbol;
     }
-
-    public boolean checkWin() {
-        char[][] winConditions = {
-                {'X', 'X', 'X'}, {'X', 'X', 'X'}, {'X', 'X', 'X'},
-                {'X', 'X', 'X'}, {'X', 'X', 'X'}, {'X', 'X', 'X'},
-                {'X', 'X', 'X'}, {'X', 'X', 'X'}
-        };
-        for (char[] condition : winConditions) {
-            if (isEqual(condition, board)) {
-                return true;
-            }
+//Todo - this is not woring - ie: no winner when x in a row in center column
+public boolean checkWin() {
+    // Check rows
+    for (int i = 0; i < 3; i++) {
+        if (board[i * 3] == board[i * 3 + 1] && board[i * 3] == board[i * 3 + 2] && board[i * 3] != ' ') {
+            return true;
         }
-        return false;
     }
 
-    private boolean isEqual(char[] arr1, char[] arr2) {
-        for (int i = 0; i < arr1.length; i++) {
-            if (arr1[i] != arr2[i] && arr1[i] != ' ') {
-                return false;
-            }
+    // Check columns
+    for (int i = 0; i < 3; i++) {
+        if (board[i] == board[i + 3] && board[i] == board[i + 6] && board[i] != ' ') {
+            return true;
         }
+    }
+
+    // Check diagonals
+    if (board[0] == board[4] && board[0] == board[8] && board[0] != ' ') {
         return true;
     }
+    if (board[2] == board[4] && board[2] == board[6] && board[2] != ' ') {
+        return true;
+    }
+
+    return false;
+}
 
     public boolean isBoardFull() {
         for (char c : board) {
@@ -160,7 +184,7 @@ class TicTacToe {
 
     public static void main(String[] args) {
         Player player1 = new HumanPlayer('X');
-        Player player2 = new AIPlayer('O', new SimpleAI());
+        Player player2 = new AIPlayer('O', new RandomAI());
         TicTacToe game = new TicTacToe(player1, player2);
         game.play();
     }
