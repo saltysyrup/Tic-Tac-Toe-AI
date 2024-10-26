@@ -191,8 +191,9 @@ public boolean checkWin() {
 
     public static void main(String[] args) {
         Player player1 = new HumanPlayer('O');
+        Player player2 = new HumanPlayer('X');
         //Player player1 = new AIPlayer('O', new SimpleAI());   // ie: "Jim-AI"
-        Player player2 = new AIPlayer('X', new RandomAI());
+        //Player player2 = new AIPlayer('X', new RandomAI());
         TicTacToe game = new TicTacToe(player1, player2);
         game.play();
     }

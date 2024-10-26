@@ -133,7 +133,8 @@ if __name__ == "__main__":
 
     # For students' AI competition:
     player1 = HumanPlayer('O')
+    player2 = HumanPlayer('X')
     #player1 = AIPlayer('X', SimpleAI())  # Replace with student AI implementation - name function with your name ie: "Jim-AI"
-    player2 = AIPlayer('X', RandomAI())  # Replace with another student AI implementation or the same for testing ie: "Mary-AI"
-    game = TicTacToe(player2, player1)
+    #player2 = AIPlayer('X', RandomAI())  # Replace with another student AI implementation or the same for testing ie: "Mary-AI"
+    game = TicTacToe(player1, player2)
     game.play()
