@@ -1,4 +1,5 @@
 
+import random
 
 class Player:
     def __init__(self, symbol):
@@ -44,11 +45,13 @@ class TicTacToe:
     def __init__(self, player1, player2):
         self.board = [' ' for _ in range(9)]
         self.players = [player1, player2]
+        #self.display_board()  # Display the board initially
+
 
     def play(self):
-        while True:
-            self.display_board()
+         while True:
             for player in self.players:
+                self.display_board()
                 player.make_move(self)
                 if self.check_win():
                     self.display_board()
@@ -77,12 +80,16 @@ class TicTacToe:
         return ' ' not in self.board
 
     def display_board(self):
+        #print("\nCurrent Board State:")
         for i in range(0, 9, 3):
             print(f" {self.board[i]} | {self.board[i+1]} | {self.board[i+2]} ")
             if i < 6:
                 print("-----------")
+        print ()
 
-# Example of a simple AI strategy
+        
+
+# Example of a simple AI strategy - pick FIRST available space 0 - 8
 class SimpleAI:
     def determine_move(self, game):
         # Simple strategy: check for winning move, then blocking opponent's win, then take first open space
@@ -104,6 +111,17 @@ class SimpleAI:
         for i in range(9):
             if game.is_valid_move(i):
                 return i
+            
+# Example of a simple AI strategy - pick a RANDOM available space 0 - 8
+class RandomAI:
+    def determine_move(self, game):
+        possibleMoves = []
+        #add all open spaces into a list to then randomly choose one
+        for i in range(9):
+            if game.is_valid_move(i):
+                possibleMoves.append(i)
+        return (random.choice(possibleMoves))
+
 
 if __name__ == "__main__":
     # Here you can decide how to initialize players
@@ -114,7 +132,8 @@ if __name__ == "__main__":
     # game.play()
 
     # For students' AI competition:
-    ai1 = AIPlayer('X', SimpleAI())  # Replace with student AI implementation
-    ai2 = AIPlayer('O', SimpleAI())  # Replace with another student AI implementation or the same for testing
-    game = TicTacToe(ai1, ai2)
+    player1 = HumanPlayer('O')
+    #player1 = AIPlayer('X', SimpleAI())  # Replace with student AI implementation - name function with your name ie: "Jim-AI"
+    player2 = AIPlayer('X', RandomAI())  # Replace with another student AI implementation or the same for testing ie: "Mary-AI"
+    game = TicTacToe(player2, player1)
     game.play()
