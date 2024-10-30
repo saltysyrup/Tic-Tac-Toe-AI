@@ -1,4 +1,6 @@
 
+# (c) 2024 Roland Labana
+
 import random
 
 class Player:
