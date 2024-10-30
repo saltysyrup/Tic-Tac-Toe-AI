@@ -53,7 +53,7 @@ class TicTacToe:
             for player in self.players:
                 self.display_board()
                 player.make_move(self)
-                if self.check_win():
+                if self.check_win(game.board):
                     self.display_board()
                     print(f"{player.symbol} wins!")
                     return
@@ -68,13 +68,13 @@ class TicTacToe:
     def make_move(self, move, symbol):
         self.board[move] = symbol
 
-    def check_win(self):
+    def check_win(self, theBoard):
         win_conditions = [
             [0, 1, 2], [3, 4, 5], [6, 7, 8],  # Rows
             [0, 3, 6], [1, 4, 7], [2, 5, 8],  # Columns
             [0, 4, 8], [2, 4, 6]  # Diagonals
         ]
-        return any(all(self.board[i] == symbol for i in combo) for symbol in ['X', 'O'] for combo in win_conditions)
+        return any(all(theBoard[i] == symbol for i in combo) for symbol in ['X', 'O'] for combo in win_conditions)
 
     def is_board_full(self):
         return ' ' not in self.board
@@ -96,14 +96,14 @@ class SimpleAI:
         for i in range(9):
             if game.is_valid_move(i):
                 game.board[i] = 'X'  # Assuming this AI plays 'X'
-                if game.check_win():
+                if game.check_win(game.board):
                     game.board[i] = ' '  # Reset for actual move
                     return i
                 game.board[i] = ' '  # Reset for next check
         for i in range(9):
             if game.is_valid_move(i):
                 game.board[i] = 'O'  # Check if opponent ('O') could win
-                if game.check_win():
+                if game.check_win(game.board):
                     game.board[i] = ' '  # Reset for actual move
                     return i
                 game.board[i] = ' '  # Reset for next check
@@ -132,9 +132,9 @@ if __name__ == "__main__":
     # game.play()
 
     # For students' AI competition:
-    player1 = HumanPlayer('O')
-    player2 = HumanPlayer('X')
-    #player1 = AIPlayer('X', SimpleAI())  # Replace with student AI implementation - name function with your name ie: "Jim-AI"
+    player1 = HumanPlayer('X')
+    #player2 = HumanPlayer('X')
+    player2 = AIPlayer('O', SimpleAI())  # Replace with student AI implementation - name function with your name ie: "Jim-AI"
     #player2 = AIPlayer('X', RandomAI())  # Replace with another student AI implementation or the same for testing ie: "Mary-AI"
     game = TicTacToe(player1, player2)
     game.play()

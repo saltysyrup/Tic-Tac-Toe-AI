@@ -64,6 +64,7 @@ interface AI {
     int determineMove(TicTacToe game);
 }
 
+// This simply picks the next open square
 class SimpleAI implements AI {
     @Override
     public int determineMove(TicTacToe game) {
@@ -116,7 +117,7 @@ class TicTacToe {
             for (Player player : players) {
                 displayBoard();
                 player.makeMove(this);
-                if (checkWin()) {
+                if (checkWin(board)) {
                     displayBoard();
                     System.out.println(player.getSymbol() + " wins!");
                     return;
@@ -138,26 +139,26 @@ class TicTacToe {
         board[move] = symbol;
     }
 
-public boolean checkWin() {
+public boolean checkWin(char[]theBoard) {
     // Check rows
     for (int i = 0; i < 3; i++) {
-        if (board[i * 3] == board[i * 3 + 1] && board[i * 3] == board[i * 3 + 2] && board[i * 3] != ' ') {
+        if (theBoard[i * 3] == theBoard[i * 3 + 1] && theBoard[i * 3] == theBoard[i * 3 + 2] && theBoard[i * 3] != ' ') {
             return true;
         }
     }
 
     // Check columns
     for (int i = 0; i < 3; i++) {
-        if (board[i] == board[i + 3] && board[i] == board[i + 6] && board[i] != ' ') {
+        if (theBoard[i] == theBoard[i + 3] && theBoard[i] == theBoard[i + 6] && theBoard[i] != ' ') {
             return true;
         }
     }
 
     // Check diagonals
-    if (board[0] == board[4] && board[0] == board[8] && board[0] != ' ') {
+    if (theBoard[0] == theBoard[4] && theBoard[0] == theBoard[8] && theBoard[0] != ' ') {
         return true;
     }
-    if (board[2] == board[4] && board[2] == board[6] && board[2] != ' ') {
+    if (theBoard[2] == theBoard[4] && theBoard[2] == theBoard[6] && theBoard[2] != ' ') {
         return true;
     }
 
@@ -190,9 +191,9 @@ public boolean checkWin() {
     }
 
     public static void main(String[] args) {
-        Player player1 = new HumanPlayer('O');
-        Player player2 = new HumanPlayer('X');
-        //Player player1 = new AIPlayer('O', new SimpleAI());   // ie: "Jim-AI"
+        Player player1 = new HumanPlayer('X');
+        //Player player2 = new HumanPlayer('X');
+        Player player2 = new AIPlayer('O', new SimpleAI());   // ie: "Jim-AI"
         //Player player2 = new AIPlayer('X', new RandomAI());
         TicTacToe game = new TicTacToe(player1, player2);
         game.play();
