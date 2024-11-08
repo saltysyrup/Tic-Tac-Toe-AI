@@ -124,20 +124,48 @@ class RandomAI:
                 possibleMoves.append(i)
         return (random.choice(possibleMoves))
 
-
-#This is David's AI - It's strategy is to choose the first avaliable position it finds
-class DavidAI:
+# Plays based off of the order of the numbers in pi
+class DavidAI:     
     def determine_move(self, game):
-        choice = None
-        
         empty = []
         for z in range(9):
             if game.is_valid_move(z):
-                empty.append(z)
+                empty.append(z+1)
                 
-        choice = empty[0]
-                
-        return (choice)
+        # pi 3.1415926535897
+        for z in range(len(empty)):
+            if empty[z] == 3:
+                return 2
+        for z in range(len(empty)):
+            if empty[z] == 1:
+                return 0
+        for z in range(len(empty)):
+            if empty[z] == 4:
+                return 3
+        #Skip repeated - 1
+        for z in range(len(empty)):
+            if empty[z] == 5:
+                return 4
+        for z in range(len(empty)):
+            if empty[z] == 9:
+                return 8
+        for z in range(len(empty)):
+            if empty[z] == 2:
+                return 1
+        for z in range(len(empty)):
+            if empty[z] == 6:
+                return 5
+        #Skip repeated - 5
+        #Skip repeated - 3
+        #Skip repeated - 5
+        for z in range(len(empty)):
+            if empty[z] == 8:
+                return 7
+        #Skip repeated - 9
+        for z in range(len(empty)):
+            if empty[z] == 7:
+                return 6
+
 
 
 if __name__ == "__main__":
