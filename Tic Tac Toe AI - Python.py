@@ -124,47 +124,139 @@ class RandomAI:
                 possibleMoves.append(i)
         return (random.choice(possibleMoves))
 
-# Plays based off of the order of the numbers in pi
-class DavidAI:     
-    def determine_move(self, game):
-        empty = []
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class DavidAI:
+    def check (b,s,n):
+        frs=fcs=fds=True
+        frn=fcn=fdn=True
+        for check in range(3):
+            for row in range(3):
+                if b[(3*check)+row]!=s:
+                    frs=False
+                if b[(3*check)+row]!=n:
+                    frn=False
+            for col in range(3):
+                if b[check+(col*3)]!=s:
+                    fcs=False
+                if b[check+(col*3)]!=n:
+                    fcn=False
+        if (b[0]==b[4] and b[0]==b[8]) or (b[2]==b[4] and b[2]==b[6]):
+            if b[4]!=s:
+                fds=False
+            if b[4]!=n:
+                fdn=False
+        if frs or fcs or fds:
+            return 'W'
+        if frn or fcn or fdn:
+            return 'L'
+        
+    def minimax (b,s,n,mt,cd,md):
+
+        pm=[]
         for z in range(9):
-            if game.is_valid_move(z):
-                empty.append(z+1)
+            if b[z]==' ':
+                pm.append(z)
+        
+        if cd==md or len(pm)<1:
+            return 0
+        o = DavidAI.check(b,s,n)
+        if o=='W':
+            return 10
+        if o=='L':
+            return -10
+        if mt:
+            t=-100
+            for z in range(len(pm)):
+                b[pm[z]]=s
+                t=max(t,DavidAI.minimax(b,s,n,False,cd+1,md))
+                b[pm[z]]=' '
+            
+            return t
+        else:
+            t=100
+            for z in range(len(pm)):
+                b[pm[z]]=n
+                t=min(t,DavidAI.minimax(b,s,n,True,cd+1,md))
+                b[pm[z]]=' '
+            return t
+
+    def determine_move(self, game):
+        b=game.board
+        cx=b.count('X')
+        co=b.count('O')
+        if cx==co:
+            s=game.players[0].symbol
+            n=game.players[1].symbol
+        else:
+            if cx>co:
+                s='O'
+                n='X'
+            else:
+                s='X'
+                n='O'
+
+        pm=[]
+        for z in range(9):
+            if b[z]==' ':
+                pm.append(z)
                 
-        # pi 3.1415926535897
-        for z in range(len(empty)):
-            if empty[z] == 3:
-                return 2
-        for z in range(len(empty)):
-            if empty[z] == 1:
-                return 0
-        for z in range(len(empty)):
-            if empty[z] == 4:
-                return 3
-        #Skip repeated - 1
-        for z in range(len(empty)):
-            if empty[z] == 5:
-                return 4
-        for z in range(len(empty)):
-            if empty[z] == 9:
-                return 8
-        for z in range(len(empty)):
-            if empty[z] == 2:
-                return 1
-        for z in range(len(empty)):
-            if empty[z] == 6:
-                return 5
-        #Skip repeated - 5
-        #Skip repeated - 3
-        #Skip repeated - 5
-        for z in range(len(empty)):
-            if empty[z] == 8:
-                return 7
-        #Skip repeated - 9
-        for z in range(len(empty)):
-            if empty[z] == 7:
-                return 6
+        bm=-100
+        bs=-100
+        for z in range(len(pm)):
+            b[pm[z]]=s
+            score = DavidAI.minimax(b,s,n,True,0,99)
+            b[pm[z]]=' '
+            if score>bs:
+                bs=score
+                bm=z
+        return pm[bm]
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -177,9 +269,9 @@ if __name__ == "__main__":
     # game.play()
 
     # For students' AI competition:
-    player1 = HumanPlayer('X')
+    player1 = HumanPlayer('X')#HumanPlayer('O')
     #player2 = HumanPlayer('X')
-    player2 = AIPlayer('O', DavidAI())  # Replace with student AI implementation - name function with your name ie: "Jim-AI"
+    player2 = AIPlayer('O', DavidAI())#AIPlayer('X', DavidAI())  # Replace with student AI implementation - name function with your name ie: "Jim-AI"
     #player2 = AIPlayer('X', RandomAI())  # Replace with another student AI implementation or the same for testing ie: "Mary-AI"
     game = TicTacToe(player1, player2)
     game.play()
